@@ -1,6 +1,4 @@
 import { useState } from "react";
-import Alert from "./components/Alert";
-import Button from "./components/Button";
 import ListGroup from "./components/ListGroup";
 let items=["New york","SF","Chennai",'Chicago']
 const handleClick=(item:String)=>{
