@@ -11,17 +11,21 @@ function App() {
   const [alertVisible,setAlertVisibility]=useState(false);
   const [drink,setdrink]=useState({
     title:'Red bull',
-    price:5
+    price:5,
+    location:{
+      city:'chico',
+      zipcode:12345
+    }
   });
   const handleClick=()=>{
-    setdrink({...drink,price:6});
+    setdrink({...drink,price:6,location:{...drink.location,zipcode:95926}});
   }
   return (
     <div>
    {/* <ListGroup items={items} heading='Cities' onSelectItem={handleClick}></ListGroup>
    <AiFillChrome></AiFillChrome>
     <Like onClick={()=>{console.log('clicked')}}color='blue'></Like> */}
-    {drink.price}
+    {drink.price}{drink.location.zipcode}
     <button onClick={handleClick}>click here</button>
     </div>
   );
