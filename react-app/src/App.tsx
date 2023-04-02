@@ -9,20 +9,12 @@ let items=["New york","SF","Chennai",'Chicago']
 // }
 function App() {
   const [alertVisible,setAlertVisibility]=useState(false);
-  const [tags,setTags]=useState(['happy','cheerful']);
+  const [tags,setTags]=useState([{id:1,title:'Bug1',fixed:true},{id:2,title:'Bug2',fixed:false}]);
   const handleClick=()=>{
-    setTags([...tags,'sad']); //add
-    setTags(tags.filter(tag=>tag!=='happy')); //remove
-    setTags(tags.map(tag=>tag==='happy'?'happiness':tag));
-
+    setTags(tags.map(tags=>tags.id===1?{...tags,fixed:false}:tags));
   }
   return (
     <div>
-   {/* <ListGroup items={items} heading='Cities' onSelectItem={handleClick}></ListGroup>
-   <AiFillChrome></AiFillChrome>
-    <Like onClick={()=>{console.log('clicked')}}color='blue'></Like> */}
-    {/* {drink.price}{drink.location.zipcode} */}
-    {tags}
     <button onClick={handleClick}>click here</button>
     </div>
   );
