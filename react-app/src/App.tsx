@@ -3,12 +3,20 @@ import Navbar from './components/Navbar'
 import Cart from './components/Cart'
 
 function App () {
-  const [items,setitems]=useState(['Product 1','Product 2'])
+  const [items,setitems]=useState({
+    id:1,
+    player:{
+      name:"john",
+    },
+  });
+  const handleClick =() =>{
+    setitems({...items,player:{...items.player,name:"kausic"}})
+  }
   return (
     <>
     <div>App</div>
-    <Navbar ItemCount={items.length}></Navbar>
-    <Cart CartItems={items} onClear={()=>setitems([])}></Cart>
+    {items.player.name}
+    <button onClick={handleClick}>Click me</button>
     </>
   )
 }
