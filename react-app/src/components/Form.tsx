@@ -9,7 +9,7 @@ const schema=z.object({
 });
 type FormData=z.infer<typeof schema>;
 const Form = () => {
-    const {register,handleSubmit,formState:{errors}}=useForm<FormData>({resolver:zodResolver(schema)});   
+    const {register,handleSubmit,formState:{errors,isValid}}=useForm<FormData>({resolver:zodResolver(schema)});   
     const onSubmit = (data:FieldValues)=>console.log(data);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -23,7 +23,7 @@ const Form = () => {
             <input {...register('age',{valueAsNumber:true})}id="age" type="number" className="form-control" />
             {errors.age && <p className='text-danger'>{errors.age.message}</p>}
         </div>
-        <button className="btn btn-primary" type='submit'>Submit</button>
+        <button disabled={!isValid} className="btn btn-primary" type='submit'>Submit</button>
 
     </form>
   )
