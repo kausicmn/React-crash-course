@@ -17,19 +17,28 @@ interface user
 function App () {
 const [users,setusers]=useState<user[]>([]);
 const [error,seterror]=useState('');
+const [loading,setloading]=useState(false)
 useEffect(()=>{
     const controller=new AbortController();
+    setloading(true)
     axios.get<user[]>("https://jsonplaceholder.typicode.com/users",{signal:controller.signal})
-    .then(res=>setusers(res.data)).catch((err)=>
+    .then((res)=>
+    {
+      setusers(res.data)
+      setloading(false)
+    }
+      ).catch((err)=>
       {
         if(err instanceof CanceledError) return;
         seterror(err.message);
+        setloading(false);
     });
     return () => controller.abort();
 },[])
   return (
     <>
     {error&&<p className='text-danger'>{error}</p>}
+   {loading && <div className="spinner-border"></div>}
     <div>
       <ul>
         {users.map((user)=><li key={user.id}>{user.name}</li>)}
