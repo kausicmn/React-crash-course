@@ -16,7 +16,7 @@ function App() {
   const [loading, setloading] = useState(false);
   useEffect(() => {
     setloading(true);
-   const {response,cancel}=userService.getalluser();
+   const {response,cancel}=userService.getall<user>();
    response.then((res) => {
         setusers(res.data);
         setloading(false);
@@ -31,7 +31,7 @@ function App() {
   const onclick = (user: user) => {
     const before = [...users];
     setusers(users.filter((u) => u.id != user.id));
-    userService.deleteuser(user.id).catch((err) => {
+    userService.delete(user.id).catch((err) => {
         seterror(err.message);
         setusers(before);
       });
@@ -39,7 +39,7 @@ function App() {
 const add = ()=>{
   const orignal = [...users];
   const newuser={
-    id:'13',
+    id:13,
     name:'kausic'
   };
   setusers([newuser,...users]);
