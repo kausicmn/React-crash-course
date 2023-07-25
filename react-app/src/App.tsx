@@ -8,19 +8,23 @@ import ExpenseFilter from './ExpenseTracker/components/ExpenseFilter';
 import ExpenseList from './ExpenseTracker/components/ExpenseList';
 import categories from './ExpenseTracker/categories'
 import ProductList from './components/ProductList';
-const connect=()=>{
-  console.log('connecting')
-}
-const disconnect=()=>{
-  console.log('disconnecting')
+import axios from 'axios';
+interface user
+{
+  id:string
+  name:string
 }
 function App () {
+const [users,setusers]=useState<user[]>([])
 useEffect(()=>{
-  connect();
-  return ()=> disconnect();
-})
+  axios.get<user[]>("https://jsonplaceholder.typicode.com/users").then(res=>setusers(res.data))
+},[])
   return (
-    <div></div>
+    <div>
+      <ul>
+        {users.map((user)=><li key={user.id}>{user.name}</li>)}
+      </ul>
+    </div>
   )
 }
 
