@@ -7,21 +7,18 @@ import ExpenseForm from './ExpenseTracker/components';
 import ExpenseFilter from './ExpenseTracker/components/ExpenseFilter';
 import ExpenseList from './ExpenseTracker/components/ExpenseList';
 import categories from './ExpenseTracker/categories'
+import ProductList from './components/ProductList';
 
 function App () {
-  const ref=useRef<HTMLInputElement>(null)
-  useEffect(()=>{
-    if (ref.current)
-    {
-      ref.current.focus()
-    }
-  })
-  useEffect(()=>{
-    document.title='my-app'
-  })
+  const[categrory,setcategory]= useState('')
   return (
     <div>
-      <input type='text' className='form-control'></input>
+      <ProductList category={categrory}></ProductList>
+      <select className='form-select' onChange={(event)=>setcategory(event.target.value)}>
+        <option value=""></option>
+        <option value="Clothing">Clothing</option>
+        <option value="Household">Household</option>
+      </select>
     </div>
   )
 }
