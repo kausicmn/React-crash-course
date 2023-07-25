@@ -9,22 +9,15 @@ import ExpenseList from "./ExpenseTracker/components/ExpenseList";
 import categories from "./ExpenseTracker/categories";
 import ProductList from "./components/ProductList";
 import apiClient, { CanceledError } from "./services/api-client";
-interface user {
-  id: string;
-  name: string;
-}
+import userService ,{user} from "./services/user-service"
 function App() {
   const [users, setusers] = useState<user[]>([]);
   const [error, seterror] = useState("");
   const [loading, setloading] = useState(false);
   useEffect(() => {
-    const controller = new AbortController();
     setloading(true);
-    apiClient
-      .get<user[]>("/users", {
-        signal: controller.signal,
-      })
-      .then((res) => {
+   const {response,cancel}=userService.getalluser();
+   response.then((res) => {
         setusers(res.data);
         setloading(false);
       })
@@ -33,14 +26,12 @@ function App() {
         seterror(err.message);
         setloading(false);
       });
-    return () => controller.abort();
+    return () => cancel();
   }, []);
   const onclick = (user: user) => {
     const before = [...users];
     setusers(users.filter((u) => u.id != user.id));
-    apiClient
-      .delete("/users/" + user.id)
-      .catch((err) => {
+    userService.deleteuser(user.id).catch((err) => {
         seterror(err.message);
         setusers(before);
       });
@@ -52,7 +43,7 @@ const add = ()=>{
     name:'kausic'
   };
   setusers([newuser,...users]);
-  apiClient.post("/users/",newuser).then(res=>(setusers([res.data,...users]))).catch((err)=>{
+ userService.add(newuser).then(res=>(setusers([res.data,...users]))).catch((err)=>{
     seterror(err.message);
     setusers(orignal);
   })  
@@ -61,7 +52,7 @@ const update=(user:user)=>{
   const orignal = [...users];
   const upadateduser={...user,name: user.name +'!'}
   setusers(users.map(u=>u.id==user.id?upadateduser:u))
-  apiClient.patch("/users/"+ user.id,upadateduser).catch((err)=>{
+  userService.update(upadateduser).catch((err)=>{
     seterror(err.message);
     setusers(orignal);
   })  
