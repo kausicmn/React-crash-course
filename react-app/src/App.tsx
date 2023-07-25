@@ -8,7 +8,7 @@ import ExpenseFilter from "./ExpenseTracker/components/ExpenseFilter";
 import ExpenseList from "./ExpenseTracker/components/ExpenseList";
 import categories from "./ExpenseTracker/categories";
 import ProductList from "./components/ProductList";
-import axios, { AxiosError, CanceledError } from "axios";
+import apiClient, { CanceledError } from "./services/api-client";
 interface user {
   id: string;
   name: string;
@@ -20,8 +20,8 @@ function App() {
   useEffect(() => {
     const controller = new AbortController();
     setloading(true);
-    axios
-      .get<user[]>("https://jsonplaceholder.typicode.com/users", {
+    apiClient
+      .get<user[]>("/users", {
         signal: controller.signal,
       })
       .then((res) => {
@@ -38,8 +38,8 @@ function App() {
   const onclick = (user: user) => {
     const before = [...users];
     setusers(users.filter((u) => u.id != user.id));
-    axios
-      .delete("https://jsonplaceholder.typicode.com/users/" + user.id)
+    apiClient
+      .delete("/users/" + user.id)
       .catch((err) => {
         seterror(err.message);
         setusers(before);
@@ -52,13 +52,20 @@ const add = ()=>{
     name:'kausic'
   };
   setusers([newuser,...users]);
-  axios.post("https://jsonplaceholder.typicode.com/users/",newuser).then(res=>(setusers([res.data,...users]))).catch((err)=>{
+  apiClient.post("/users/",newuser).then(res=>(setusers([res.data,...users]))).catch((err)=>{
     seterror(err.message);
     setusers(orignal);
-  })
-  
+  })  
 }
-
+const update=(user:user)=>{
+  const orignal = [...users];
+  const upadateduser={...user,name: user.name +'!'}
+  setusers(users.map(u=>u.id==user.id?upadateduser:u))
+  apiClient.patch("/users/"+ user.id,upadateduser).catch((err)=>{
+    seterror(err.message);
+    setusers(orignal);
+  })  
+  }
   return (
     <>
       {error && <p className="text-danger">{error}</p>}
@@ -77,12 +84,20 @@ const add = ()=>{
               className="list-group-item d-flex justify-content-between"
             >
               {user.name}
+              <div>
+              <button
+                className="btn btn-secondary mx-1"
+                onClick={() => update(user)}
+              >
+                Update
+              </button>
               <button
                 className="btn btn-outline-danger"
                 onClick={() => onclick(user)}
               >
                 Delete
               </button>
+              </div>
             </li>
           ))}
         </ul>
