@@ -8,18 +8,19 @@ import ExpenseFilter from './ExpenseTracker/components/ExpenseFilter';
 import ExpenseList from './ExpenseTracker/components/ExpenseList';
 import categories from './ExpenseTracker/categories'
 import ProductList from './components/ProductList';
-
+const connect=()=>{
+  console.log('connecting')
+}
+const disconnect=()=>{
+  console.log('disconnecting')
+}
 function App () {
-  const[categrory,setcategory]= useState('')
+useEffect(()=>{
+  connect();
+  return ()=> disconnect();
+})
   return (
-    <div>
-      <ProductList category={categrory}></ProductList>
-      <select className='form-select' onChange={(event)=>setcategory(event.target.value)}>
-        <option value=""></option>
-        <option value="Clothing">Clothing</option>
-        <option value="Household">Household</option>
-      </select>
-    </div>
+    <div></div>
   )
 }
 
