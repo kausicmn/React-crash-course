@@ -15,16 +15,20 @@ interface user
   name:string
 }
 function App () {
-const [users,setusers]=useState<user[]>([])
+const [users,setusers]=useState<user[]>([]);
+const [error,seterror]=useState('');
 useEffect(()=>{
-  axios.get<user[]>("https://jsonplaceholder.typicode.com/users").then(res=>setusers(res.data))
+  axios.get<user[]>("https://jsonplaceholder.typicode.com/ausers").then(res=>setusers(res.data)).catch(err=>seterror(err.message))
 },[])
   return (
+    <>
+    {error&&<p className='text-danger'>{error}</p>}
     <div>
       <ul>
         {users.map((user)=><li key={user.id}>{user.name}</li>)}
       </ul>
     </div>
+    </>
   )
 }
 
