@@ -45,12 +45,32 @@ function App() {
         setusers(before);
       });
   };
+const add = ()=>{
+  const orignal = [...users];
+  const newuser={
+    id:'13',
+    name:'kausic'
+  };
+  setusers([newuser,...users]);
+  axios.post("https://jsonplaceholder.typicode.com/users/",newuser).then(res=>(setusers([res.data,...users]))).catch((err)=>{
+    seterror(err.message);
+    setusers(orignal);
+  })
+  
+}
+
   return (
     <>
       {error && <p className="text-danger">{error}</p>}
       {loading && <div className="spinner-border"></div>}
       <div>
         <ul className="list-group">
+        <button
+                className="btn btn-outline-primary"
+                onClick={add}
+              >
+              Add
+              </button>
           {users.map((user) => (
             <li
               key={user.id}
