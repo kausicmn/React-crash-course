@@ -10,24 +10,9 @@ import categories from "./ExpenseTracker/categories";
 import ProductList from "./components/ProductList";
 import apiClient, { CanceledError } from "./services/api-client";
 import userService ,{user} from "./services/user-service"
+import useUsers from "./hooks/useUsers";
 function App() {
-  const [users, setusers] = useState<user[]>([]);
-  const [error, seterror] = useState("");
-  const [loading, setloading] = useState(false);
-  useEffect(() => {
-    setloading(true);
-   const {response,cancel}=userService.getall<user>();
-   response.then((res) => {
-        setusers(res.data);
-        setloading(false);
-      })
-      .catch((err) => {
-        if (err instanceof CanceledError) return;
-        seterror(err.message);
-        setloading(false);
-      });
-    return () => cancel();
-  }, []);
+  const {setusers,seterror,users,error,loading}= useUsers();
   const onclick = (user: user) => {
     const before = [...users];
     setusers(users.filter((u) => u.id != user.id));
